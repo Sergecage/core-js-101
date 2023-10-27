@@ -260,7 +260,7 @@ function reverseString(str) {
  *   34143 => 34143
  */
 function reverseInteger(num) {
-  return num.toString().split('').reverse().join('');
+  return +[...num.toString()].reverse().join('');
 }
 
 
@@ -285,22 +285,22 @@ function reverseInteger(num) {
  *   4916123456789012 => false
  */
 function isCreditCardNumber(ccn) {
-  const ccnInput = ccn.toString().split('').map(Number);
-  for (let i = ccnInput.length - 2; i >= 0; i -= 2) {
-    let value = ccnInput[i];
-    value *= 2;
-
-    if (value > 9) {
-      value = (value % 10) + 1;
-    }
-    ccnInput[i] = value;
-  }
-
   let sum = 0;
-  for (let i = 0; i < ccnInput.length; i + 1) {
-    sum += ccnInput[i];
+  const arr = Array.from(String(ccn)).reverse();
+  arr.forEach((item, index) => {
+    if (index % 2 === 1) {
+      const num = Number(item) * 2 > 9 ? Number(item) * 2 - 9 : Number(item) * 2;
+      sum += num;
+    } else {
+      sum += Number(item);
+    }
+  });
+
+  if (sum % 10 === 0) {
+    return true;
   }
-  return sum % 10 === 0;
+
+  return false;
 }
 
 /**
